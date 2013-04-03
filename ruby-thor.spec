@@ -1,11 +1,11 @@
-%define pkgname thor
+%define		pkgname	thor
 Summary:	A scripting framework that replaces rake, sake and rubigen
 Name:		ruby-%{pkgname}
-Version:	0.13.4
-Release:	0.1
+Version:	0.17.0
+Release:	1
 License:	MIT/Ruby License
 Source0:	http://rubygems.org/downloads/%{pkgname}-%{version}.gem
-# Source0-md5:	39f2df6ca783f6b60e6fed2599909a02
+# Source0-md5:	72f4fbc6f5a59d09f1deaf44248b52e8
 Group:		Development/Languages
 URL:		http://yehudakatz.com/
 BuildRequires:	rpmbuild(macros) >= 1.484
@@ -48,15 +48,17 @@ Dokumentacji w formacie ri dla %{pkgname}.
 %prep
 %setup -q -c
 %{__tar} xf %{SOURCE0} -O data.tar.gz | %{__tar} xz
-find -newer README.rdoc -o -print | xargs touch --reference %{SOURCE0}
+find -newer README.md -o -print | xargs touch --reference %{SOURCE0}
 
 %{__sed} -i -e 's,/usr/bin/env ruby,%{__ruby},' bin/{rake2thor,thor}
 
 %build
 rdoc --ri --op ri lib
 rdoc --op rdoc lib
-rm -r ri/{File,Object}
 rm ri/created.rid
+rm ri/cache.ri
+# foreign docs
+rm -r ri/Object
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -72,8 +74,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CHANGELOG.rdoc README.rdoc
-%attr(755,root,root) %{_bindir}/*
+%doc CHANGELOG.rdoc README.md LICENSE.md
+%attr(755,root,root) %{_bindir}/rake2thor
+%attr(755,root,root) %{_bindir}/thor
 %{ruby_rubylibdir}/%{pkgname}.rb
 %{ruby_rubylibdir}/%{pkgname}
 
