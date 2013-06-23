@@ -8,15 +8,11 @@ Source0:	http://rubygems.org/downloads/%{pkgname}-%{version}.gem
 # Source0-md5:	72f4fbc6f5a59d09f1deaf44248b52e8
 Group:		Development/Languages
 URL:		http://yehudakatz.com/
-BuildRequires:	rpmbuild(macros) >= 1.484
-BuildRequires:	ruby >= 1:1.8.6
-BuildRequires:	ruby-modules
-%{?ruby_mod_ver_requires_eq}
-#BuildArch:	noarch
+BuildRequires:	rpm-rubyprov
+BuildRequires:	rpmbuild(macros) >= 1.656
+BuildRequires:	sed >= 4.0
+BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
-# nothing to be placed there. we're not noarch only because of ruby packaging
-%define		_enable_debug_packages	0
 
 %description
 A scripting framework that replaces rake, sake and rubigen
@@ -46,11 +42,8 @@ ri documentation for %{pkgname}.
 Dokumentacji w formacie ri dla %{pkgname}.
 
 %prep
-%setup -q -c
-%{__tar} xf %{SOURCE0} -O data.tar.gz | %{__tar} xz
-find -newer README.md -o -print | xargs touch --reference %{SOURCE0}
-
-%{__sed} -i -e 's,/usr/bin/env ruby,%{__ruby},' bin/{rake2thor,thor}
+%setup -q -n %{pkgname}-%{version}
+%{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
 
 %build
 rdoc --ri --op ri lib
@@ -62,10 +55,9 @@ rm -r ri/Object
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{ruby_rubylibdir},%{ruby_ridir},%{ruby_rdocdir},%{_bindir}}
-
+install -d $RPM_BUILD_ROOT{%{ruby_vendorlibdir},%{ruby_ridir},%{ruby_rdocdir},%{_bindir}}
+cp -a lib/* $RPM_BUILD_ROOT%{ruby_vendorlibdir}
 cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
-cp -a lib/* $RPM_BUILD_ROOT%{ruby_rubylibdir}
 cp -a ri/* $RPM_BUILD_ROOT%{ruby_ridir}
 cp -a rdoc $RPM_BUILD_ROOT%{ruby_rdocdir}/%{name}-%{version}
 
@@ -77,8 +69,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc CHANGELOG.rdoc README.md LICENSE.md
 %attr(755,root,root) %{_bindir}/rake2thor
 %attr(755,root,root) %{_bindir}/thor
-%{ruby_rubylibdir}/%{pkgname}.rb
-%{ruby_rubylibdir}/%{pkgname}
+%{ruby_vendorlibdir}/%{pkgname}.rb
+%{ruby_vendorlibdir}/%{pkgname}
 
 %files rdoc
 %defattr(644,root,root,755)
