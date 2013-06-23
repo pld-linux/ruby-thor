@@ -11,6 +11,9 @@ URL:		http://yehudakatz.com/
 BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.656
 BuildRequires:	sed >= 4.0
+%if %(locale -a | grep -q '^en_US$'; echo $?)
+BuildRequires:	glibc-localedb-all
+%endif
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -46,6 +49,8 @@ Dokumentacji w formacie ri dla %{pkgname}.
 %{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
 
 %build
+# UTF8 locale needed for doc generation
+export LC_ALL=en_US.UTF-8
 rdoc --ri --op ri lib
 rdoc --op rdoc lib
 rm ri/created.rid
