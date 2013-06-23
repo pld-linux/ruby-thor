@@ -2,14 +2,14 @@
 Summary:	A scripting framework that replaces rake, sake and rubigen
 Name:		ruby-%{pkgname}
 Version:	0.17.0
-Release:	1
+Release:	2
 License:	MIT/Ruby License
 Source0:	http://rubygems.org/downloads/%{pkgname}-%{version}.gem
 # Source0-md5:	72f4fbc6f5a59d09f1deaf44248b52e8
 Group:		Development/Languages
 URL:		http://yehudakatz.com/
 BuildRequires:	rpm-rubyprov
-BuildRequires:	rpmbuild(macros) >= 1.656
+BuildRequires:	rpmbuild(macros) >= 1.665
 BuildRequires:	sed >= 4.0
 %if %(locale -a | grep -q '^en_US$'; echo $?)
 BuildRequires:	glibc-localedb-all
@@ -49,6 +49,8 @@ Dokumentacji w formacie ri dla %{pkgname}.
 %{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
 
 %build
+%__gem_helper spec
+
 # UTF8 locale needed for doc generation
 export LC_ALL=en_US.UTF-8
 rdoc --ri --op ri lib
@@ -66,6 +68,9 @@ cp -a bin/* $RPM_BUILD_ROOT%{_bindir}
 cp -a ri/* $RPM_BUILD_ROOT%{ruby_ridir}
 cp -a rdoc $RPM_BUILD_ROOT%{ruby_rdocdir}/%{name}-%{version}
 
+install -d $RPM_BUILD_ROOT%{ruby_specdir}
+cp -p %{pkgname}-%{version}.gemspec $RPM_BUILD_ROOT%{ruby_specdir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -76,6 +81,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/thor
 %{ruby_vendorlibdir}/%{pkgname}.rb
 %{ruby_vendorlibdir}/%{pkgname}
+%{ruby_specdir}/%{pkgname}-%{version}.gemspec
 
 %files rdoc
 %defattr(644,root,root,755)
