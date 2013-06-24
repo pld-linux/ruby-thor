@@ -1,11 +1,11 @@
 %define		pkgname	thor
 Summary:	A scripting framework that replaces rake, sake and rubigen
 Name:		ruby-%{pkgname}
-Version:	0.17.0
-Release:	2
+Version:	0.18.1
+Release:	1
 License:	MIT/Ruby License
 Source0:	http://rubygems.org/downloads/%{pkgname}-%{version}.gem
-# Source0-md5:	72f4fbc6f5a59d09f1deaf44248b52e8
+# Source0-md5:	a1be884a982166054d1ac35c4a9bef55
 Group:		Development/Languages
 URL:		http://yehudakatz.com/
 BuildRequires:	rpm-rubyprov
@@ -76,8 +76,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CHANGELOG.rdoc README.md LICENSE.md
-%attr(755,root,root) %{_bindir}/rake2thor
+%doc CHANGELOG.md README.md LICENSE.md
 %attr(755,root,root) %{_bindir}/thor
 %{ruby_vendorlibdir}/%{pkgname}.rb
 %{ruby_vendorlibdir}/%{pkgname}
