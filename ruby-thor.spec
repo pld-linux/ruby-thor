@@ -53,11 +53,12 @@ Dokumentacja w formacie ri dla pakietu thor.
 %setup -q -n %{pkgname}-%{version}
 %{__sed} -i -e '1 s,#!.*ruby,#!%{__ruby},' bin/*
 
-# make gemspec self-contained
-%{__sed} -e '2,4d' -e '5r lib/thor/version.rb' thor.gemspec > thor-%{version}.gemspec
-
 %build
-%__gem_helper .
+# make gemspec self-contained
+ruby -r rubygems -e 'spec = eval(File.read("thor.gemspec"))
+	File.open("thor-%{version}.gemspec", "w") do |file|
+		file.puts spec.to_ruby_for_cache
+	end'
 
 # UTF8 locale needed for doc generation
 export LC_ALL=en_US.UTF-8
