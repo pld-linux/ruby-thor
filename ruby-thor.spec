@@ -3,7 +3,7 @@ Summary:	A scripting framework that replaces rake, sake and rubigen
 Summary(pl.UTF-8):	Szkielet skryptowy zastępujący rake, sake i rubigen
 Name:		ruby-%{pkgname}
 Version:	0.19.1
-Release:	2
+Release:	3
 License:	MIT
 #Source0:	http://rubygems.org/downloads/%{pkgname}-%{version}.gem
 Source0:	https://github.com/erikhuda/thor/archive/v%{version}/%{name}-%{version}.tar.gz
