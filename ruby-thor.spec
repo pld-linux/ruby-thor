@@ -2,18 +2,18 @@
 Summary:	A scripting framework that replaces rake, sake and rubigen
 Summary(pl.UTF-8):	Szkielet skryptowy zastępujący rake, sake i rubigen
 Name:		ruby-%{pkgname}
-Version:	0.19.1
-Release:	3
+Version:	0.20.0
+Release:	1
 License:	MIT
 #Source0:	http://rubygems.org/downloads/%{pkgname}-%{version}.gem
-Source0:	https://github.com/erikhuda/thor/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	a75c399b989c0cb98edb5431ff458419
+Source0:	https://github.com/erikhuda/thor/archive/v%{version}/%{pkgname}-%{version}.tar.gz
+# Source0-md5:	2ae540058dcefcee5afef33ed1a66538
 Group:		Development/Languages
 URL:		http://whatisthor.com/
 BuildRequires:	rpm-rubyprov
 BuildRequires:	rpmbuild(macros) >= 1.665
 BuildRequires:	sed >= 4.0
-%if %(locale -a | grep -q '^en_US$'; echo $?)
+%if %(locale -a | grep -q '^C\.utf8$'; echo $?)
 BuildRequires:	glibc-localedb-all
 %endif
 BuildArch:	noarch
@@ -38,16 +38,16 @@ HTML documentation for %{pkgname}.
 Dokumentacja w formacie HTML dla pakietu thor.
 
 %package ri
-Summary:	ri documentation for %{pkgname}
-Summary(pl.UTF-8):	Dokumentacja w formacie ri dla pakietu thor
+Summary:	ri documentation for Ruby thor module
+Summary(pl.UTF-8):	Dokumentacja w formacie ri dla modułu thor języka Ruby
 Group:		Documentation
 Requires:	ruby
 
 %description ri
-ri documentation for %{pkgname}.
+ri documentation for Ruby thor module.
 
 %description ri -l pl.UTF-8
-Dokumentacja w formacie ri dla pakietu thor.
+Dokumentacja w formacie ri dla modułu thor języka Ruby.
 
 %prep
 %setup -q -n %{pkgname}-%{version}
@@ -61,7 +61,7 @@ ruby -r rubygems -e 'spec = eval(File.read("thor.gemspec"))
 	end'
 
 # UTF8 locale needed for doc generation
-export LC_ALL=en_US.UTF-8
+export LC_ALL=C.UTF-8
 rdoc --ri --op ri lib
 rdoc --op rdoc lib
 %{__rm} ri/created.rid
